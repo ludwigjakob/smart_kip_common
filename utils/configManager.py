@@ -1,6 +1,6 @@
 import json
 import sys
-from debug import Debugger
+from common.utils.debug import Debugger
 
 debug = Debugger()
 

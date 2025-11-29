@@ -1,8 +1,8 @@
 import os
-from data_connector.base_connector import BaseConnector
+from common.data_connector.base_connector import BaseConnector
 from dotenv import load_dotenv
 import mysql.connector
-from data_connector.db_utils import ensure_database_exists
+from common.data_connector.db_utils import ensure_database_exists
 
 load_dotenv()
 

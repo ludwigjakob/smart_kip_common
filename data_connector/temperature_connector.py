@@ -1,5 +1,5 @@
 from influxdb_client import InfluxDBClient
-from data_connector.base_connector import BaseConnector
+from common.data_connector.base_connector import BaseConnector
 import os
 from dotenv import load_dotenv
 
