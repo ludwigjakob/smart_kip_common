@@ -1,8 +1,8 @@
-from data_connector.temperature_connector import TemperatureConnector
-from data_connector.mode_connector import ModeConnector
-from data_connector.threshold_connector import ThresholdConnector
-from data_connector.analysis_connector import AnalysisConnector
-from data_connector.socket_connector import SocketConnector
+from common.data_connector.temperature_connector import TemperatureConnector
+from common.data_connector.mode_connector import ModeConnector
+from common.data_connector.threshold_connector import ThresholdConnector
+from common.data_connector.analysis_connector import AnalysisConnector
+from common.data_connector.socket_connector import SocketConnector
 
 class ConnectorManager:
     def __init__(self):
