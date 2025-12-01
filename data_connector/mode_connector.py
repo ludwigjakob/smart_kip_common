@@ -77,3 +77,10 @@ class ModeConnector(BaseConnector):
 
         threading.Thread(target=delayed_write).start()
 
+    def get_fan_speed(self) -> int:
+        conn = mysql.connector.connect(**self.db_config)
+        c = conn.cursor()
+        c.execute("SELECT fan_speed FROM mode WHERE id = 1")
+        result = c.fetchone()
+        conn.close()
+        return result[0] if result else 0
