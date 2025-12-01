@@ -2,7 +2,7 @@ import datetime
 import json
 
 class Debugger:
-    def __init__(self, config_path='config.json'):
+    def __init__(self, config_path='common/utils/config.json'):
         self.enabled = self.load_mode(config_path)
 
     def load_mode(self, path):
