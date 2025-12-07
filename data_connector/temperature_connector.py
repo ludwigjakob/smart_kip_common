@@ -56,9 +56,10 @@ class TemperatureConnector(BaseConnector):
         query = f'''
         from(bucket: "trainingdata")
         |> range(start: -7d)
-        |> filter(fn: (r) => r._measurement == "temperature")
+        |> filter(fn: (r) => r._measurement == "temperature" or r._measurement == "fan_status")
         |> filter(fn: (r) => r.sensor == "{self.name}")
-        |> keep(columns: ["_time", "_value"])
+        |> filter(fn: (r) => r._field == "value")
+        |> keep(columns: ["_time", "_value", "_measurement"])
         '''
         result = self.client.query_api().query(query)
 
@@ -67,9 +68,14 @@ class TemperatureConnector(BaseConnector):
             for record in table.records:
                 records.append({
                     "time": record.get_time(),
+                    "measurement": record.get_measurement(),
                     "value": round(record.get_value(), 2)
                 })
 
         df = pd.DataFrame(records)
         df.set_index("time", inplace=True)
+
+        # Pivotieren: Spalten für temperature und fan_status
+        df = df.pivot(columns="measurement", values="value")
+
         return df
