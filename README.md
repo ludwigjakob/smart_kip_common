@@ -22,3 +22,16 @@ Shared utilities and configuration for all SmartKIP services.
     ]
   }
 }
+```
+
+## License
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
+### Third-Party Licenses
+This project uses third-party libraries under the following licenses:
+- json (Python standard library, PSF License)
+- abc (Python standard library, PSF License)
+- python-dotenv (BSD-3-Clause)
+- mysql-connector-python (GPL-2.0 with FOSS Exception)
+- pandas (BSD-3-Clause)
+- influxdb-client (MIT)
