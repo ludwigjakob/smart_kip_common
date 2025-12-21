@@ -24,3 +24,10 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_sensor_data/.env
+
+  smart_kip_analyze_data:
+    build: ../smart_kip_analyze_data
+    container_name: analyze-app
+    restart: unless-stopped
+    network_mode: host
+    env_file: ../smart_kip_analyze_data/.env
