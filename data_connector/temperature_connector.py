@@ -3,6 +3,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 from common.data_connector.base_connector import BaseConnector
 import os
 from dotenv import load_dotenv
+import pandas as pd
 
 # .env-Datei laden, damit os.getenv() funktioniert
 load_dotenv()
@@ -50,3 +51,31 @@ class TemperatureConnector(BaseConnector):
             .field("value", data["value"])
         )
         self.write_api.write(bucket=self.bucket, org=self.org, record=point)
+
+    def read_trainingdata_7_days_df(self):
+        query = f'''
+        from(bucket: "trainingdata")
+        |> range(start: -7d)
+        |> filter(fn: (r) => r._measurement == "temperature" or r._measurement == "fan_status")
+        |> filter(fn: (r) => r.sensor == "{self.name}")
+        |> filter(fn: (r) => r._field == "value")
+        |> keep(columns: ["_time", "_value", "_measurement"])
+        '''
+        result = self.client.query_api().query(query)
+
+        records = []
+        for table in result:
+            for record in table.records:
+                records.append({
+                    "time": record.get_time(),
+                    "measurement": record.get_measurement(),
+                    "value": round(record.get_value(), 2)
+                })
+
+        df = pd.DataFrame(records)
+        df.set_index("time", inplace=True)
+
+        # Pivotieren: Spalten für temperature und fan_status
+        df = df.pivot(columns="measurement", values="value")
+
+        return df
