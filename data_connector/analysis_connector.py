@@ -14,7 +14,9 @@ class AnalysisConnector(BaseConnector):
             'user': os.getenv('MARIADB_USER'),
             'password': os.getenv('MARIADB_PASSWORD'),
             'host': os.getenv('MARIADB_HOST'),
-            'database': os.getenv('MARIADB_DBNAME')
+            'database': os.getenv('MARIADB_DBNAME'),
+            'port': int(os.getenv('MARIADB_PORT', 3306))
+
         }
 
         ensure_database_exists(self.db_config)

@@ -5,7 +5,8 @@ def ensure_database_exists(db_config: dict):
     conn = mysql.connector.connect(
         user=db_config['user'],
         password=db_config['password'],
-        host=db_config['host']
+        host=db_config['host'],
+        port=db_config.get('port', 3306)
     )
     c = conn.cursor()
     c.execute(f"CREATE DATABASE IF NOT EXISTS {db_config['database']}")
