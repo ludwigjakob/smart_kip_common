@@ -7,6 +7,10 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_web_app/.env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
 
   smart_kip_control_actor:
     build: ../smart_kip_control_actor
@@ -17,6 +21,10 @@ services:
     devices:
       - /dev/gpiomem
     env_file: ../smart_kip_control_actor/.env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
 
   smart_kip_sensor_data:
     build: ../smart_kip_sensor_data
@@ -24,6 +32,10 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_sensor_data/.env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
 
   smart_kip_analyze_data:
     build: ../smart_kip_analyze_data
@@ -31,6 +43,10 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_analyze_data/.env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
 
   mariadb:
     image: mariadb:11
@@ -45,6 +61,11 @@ services:
       - "3307:3306"   # Host-Port 3307 → Container-Port 3306
     volumes:
       - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
   mariadb_data:
