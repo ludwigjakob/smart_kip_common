@@ -31,3 +31,20 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_analyze_data/.env
+
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: wohnwagen
+      MYSQL_DATABASE: wohnwagen
+      MYSQL_USER: root
+      MYSQL_PASSWORD: wohnwagen
+    ports:
+      - "3307:3306"   # Host-Port 3307 → Container-Port 3306
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
