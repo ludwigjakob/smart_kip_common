@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Globale InfluxDB-Umgebungsvariablen für alle Apps
 x-influx-env: &influx-env
   INFLUX_URL: http://localhost:8087
