@@ -9,7 +9,7 @@ import pandas as pd
 load_dotenv()
 
 class TemperatureConnector(BaseConnector):
-    def __init__(self, name="debo_temp_1", bucket="None"):
+    def __init__(self, name="debo_temp_1", bucket=None):
         # Bucket aus ENV übernehmen, falls nicht explizit gesetzt
         bucket = bucket or os.getenv("INFLUX_BUCKET")
         super().__init__(name, bucket)
