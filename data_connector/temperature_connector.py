@@ -9,7 +9,9 @@ import pandas as pd
 load_dotenv()
 
 class TemperatureConnector(BaseConnector):
-    def __init__(self, name="debo_temp_1", bucket="sensordata"):
+    def __init__(self, name="debo_temp_1", bucket=None):
+        # Bucket aus ENV übernehmen, falls nicht explizit gesetzt
+        bucket = bucket or os.getenv("INFLUX_BUCKET")
         super().__init__(name, bucket)
         
         # Umgebungsvariablen laden
@@ -54,7 +56,7 @@ class TemperatureConnector(BaseConnector):
 
     def read_trainingdata_7_days_df(self):
         query = f'''
-        from(bucket: "trainingdata")
+        from(bucket: "training_data")
         |> range(start: -7d)
         |> filter(fn: (r) => r._measurement == "temperature" or r._measurement == "fan_status")
         |> filter(fn: (r) => r.sensor == "{self.name}")

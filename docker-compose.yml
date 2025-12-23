@@ -1,4 +1,10 @@
-version: "3.9"
+# Globale InfluxDB-Umgebungsvariablen für alle Apps
+x-influx-env: &influx-env
+  INFLUX_URL: http://localhost:8087
+  INFLUX_TOKEN: smartkip-token
+  INFLUX_ORG: smartKIP
+  INFLUX_BUCKET: sensor_data
+
 
 services:
   smart_kip_web_app:
@@ -7,8 +13,11 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_web_app/.env
+    environment:
+      <<: *influx-env
     depends_on:
       - mariadb
+      - influxdb
 
 
 
@@ -21,8 +30,11 @@ services:
     devices:
       - /dev/gpiomem
     env_file: ../smart_kip_control_actor/.env
+    environment:
+      <<: *influx-env
     depends_on:
       - mariadb
+      - influxdb
 
 
 
@@ -32,8 +44,11 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_sensor_data/.env
+    environment:
+      <<: *influx-env
     depends_on:
       - mariadb
+      - influxdb
 
 
 
@@ -43,8 +58,11 @@ services:
     restart: unless-stopped
     network_mode: host
     env_file: ../smart_kip_analyze_data/.env
+    environment:
+      <<: *influx-env
     depends_on:
       - mariadb
+      - influxdb
 
 
 
@@ -62,5 +80,26 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
 
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      INFLUXD_HTTP_BIND_ADDRESS: ":8087"   # Neue InfluxDB läuft auf Port 8087
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: wohnwagen
+      DOCKER_INFLUXDB_INIT_ORG: smartKIP
+      DOCKER_INFLUXDB_INIT_BUCKET: sensor_data
+      DOCKER_INFLUXDB_INIT_RETENTION: 7d
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: smartkip-token
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+
+
 volumes:
   mariadb_data:
+  influxdb_data:
+  influxdb_config:
