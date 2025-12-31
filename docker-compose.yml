@@ -32,15 +32,14 @@ services:
 
 
 
-  smart_kip_control_actor:
-    build: ../smart_kip_control_actor
+  smart_kip_control_actuator:
+    build: ../smart_kip_control_actuator
     container_name: control-app
     restart: unless-stopped
     network_mode: host
     privileged: true
     devices:
       - /dev/gpiomem
-    env_file: ../smart_kip_control_actor/.env
     environment:
       <<: [*influx-env, *mariadb-env, *tapo-env]
     depends_on:
@@ -54,7 +53,6 @@ services:
     container_name: sensor-app
     restart: unless-stopped
     network_mode: host
-    env_file: ../smart_kip_sensor_data/.env
     environment:
       <<: [*influx-env, *mariadb-env]
     depends_on:
@@ -68,7 +66,6 @@ services:
     container_name: analyze-app
     restart: unless-stopped
     network_mode: host
-    env_file: ../smart_kip_analyze_data/.env
     environment:
       <<: [*influx-env, *mariadb-env]
     depends_on:
