@@ -24,10 +24,8 @@ services:
     container_name: web-app
     restart: unless-stopped
     network_mode: host
-    env_file: ../smart_kip_web_app/.env
     environment:
-      <<: *influx-env
-      <<: *mariadb-env
+      <<: [*influx-env, *mariadb-env]
     depends_on:
       - mariadb
       - influxdb
@@ -44,9 +42,7 @@ services:
       - /dev/gpiomem
     env_file: ../smart_kip_control_actor/.env
     environment:
-      <<: *mariadb-env
-      <<: *influx-env
-      <<: *tapo-env
+      <<: [*influx-env, *mariadb-env, *tapo-env]
     depends_on:
       - mariadb
       - influxdb
@@ -60,8 +56,7 @@ services:
     network_mode: host
     env_file: ../smart_kip_sensor_data/.env
     environment:
-      <<: *mariadb-env
-      <<: *influx-env
+      <<: [*influx-env, *mariadb-env]
     depends_on:
       - mariadb
       - influxdb
@@ -75,8 +70,7 @@ services:
     network_mode: host
     env_file: ../smart_kip_analyze_data/.env
     environment:
-      <<: *mariadb-env
-      <<: *influx-env
+      <<: [*influx-env, *mariadb-env]
     depends_on:
       - mariadb
       - influxdb
