@@ -1,10 +1,7 @@
 import os
 from common.data_connector.base_connector import BaseConnector
-from dotenv import load_dotenv
 import mysql.connector
 from common.data_connector.db_utils import ensure_database_exists
-
-load_dotenv()
 
 class SocketConnector(BaseConnector):
     def __init__(self, name="socket", bucket=None):

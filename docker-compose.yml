@@ -5,6 +5,19 @@ x-influx-env: &influx-env
   INFLUX_ORG: smartKIP
   INFLUX_BUCKET: sensor_data
 
+# Globale MariaDB-Umgebungsvariablen für alle Apps
+x-mariadb-env: &mariadb-env
+  MARIADB_USER: root
+  MARIADB_PASSWORD: wohnwagen
+  MARIADB_HOST: localhost
+  MARIADB_DBNAME: wohnwagen
+  MARIADB_PORT: "3307"
+
+# Globaloe Umgebungsvariablen für control_actuator
+x-tapo-env: &tapo-env
+  TAPO_USER: ludwig.jakob91@googlemail.com
+  TAPO_PASSWORD: K1Pwohnwagen
+
 
 services:
   smart_kip_web_app:
@@ -15,6 +28,7 @@ services:
     env_file: ../smart_kip_web_app/.env
     environment:
       <<: *influx-env
+      <<: *mariadb-env
     depends_on:
       - mariadb
       - influxdb
@@ -31,7 +45,9 @@ services:
       - /dev/gpiomem
     env_file: ../smart_kip_control_actor/.env
     environment:
+      <<: *mariadb-env
       <<: *influx-env
+      <<: *tapo-env
     depends_on:
       - mariadb
       - influxdb
@@ -45,6 +61,7 @@ services:
     network_mode: host
     env_file: ../smart_kip_sensor_data/.env
     environment:
+      <<: *mariadb-env
       <<: *influx-env
     depends_on:
       - mariadb
@@ -59,6 +76,7 @@ services:
     network_mode: host
     env_file: ../smart_kip_analyze_data/.env
     environment:
+      <<: *mariadb-env
       <<: *influx-env
     depends_on:
       - mariadb

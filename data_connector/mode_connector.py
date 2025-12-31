@@ -1,14 +1,9 @@
 import os
 from common.data_connector.base_connector import BaseConnector
-from dotenv import load_dotenv
 import mysql.connector
 from common.data_connector.db_utils import ensure_database_exists
 import threading
 import time
-
-
-
-load_dotenv()  # Lädt Umgebungsvariablen aus .env
 
 class ModeConnector(BaseConnector):
     def __init__(self, name="mode", bucket=None):
