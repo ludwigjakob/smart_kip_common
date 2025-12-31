@@ -15,9 +15,8 @@ x-mariadb-env: &mariadb-env
 
 # Globaloe Umgebungsvariablen für control_actuator
 x-tapo-env: &tapo-env
-  TAPO_USER: ludwig.jakob91@googlemail.com
-  TAPO_PASSWORD: K1Pwohnwagen
-
+  TAPO_USER: ${TAPO_USER}
+  TAPO_PASSWORD: ${TAPO_PASSWORD}
 
 services:
   smart_kip_web_app:
