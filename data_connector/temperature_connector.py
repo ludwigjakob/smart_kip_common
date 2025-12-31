@@ -2,11 +2,7 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from common.data_connector.base_connector import BaseConnector
 import os
-from dotenv import load_dotenv
 import pandas as pd
-
-# .env-Datei laden, damit os.getenv() funktioniert
-load_dotenv()
 
 class TemperatureConnector(BaseConnector):
     def __init__(self, name="debo_temp_1", bucket=None):

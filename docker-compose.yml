@@ -5,6 +5,18 @@ x-influx-env: &influx-env
   INFLUX_ORG: smartKIP
   INFLUX_BUCKET: sensor_data
 
+# Globale MariaDB-Umgebungsvariablen für alle Apps
+x-mariadb-env: &mariadb-env
+  MARIADB_USER: root
+  MARIADB_PASSWORD: wohnwagen
+  MARIADB_HOST: localhost
+  MARIADB_DBNAME: wohnwagen
+  MARIADB_PORT: "3307"
+
+# Globaloe Umgebungsvariablen für control_actuator
+x-tapo-env: &tapo-env
+  TAPO_USER: ${TAPO_USER}
+  TAPO_PASSWORD: ${TAPO_PASSWORD}
 
 services:
   smart_kip_web_app:
@@ -12,26 +24,24 @@ services:
     container_name: web-app
     restart: unless-stopped
     network_mode: host
-    env_file: ../smart_kip_web_app/.env
     environment:
-      <<: *influx-env
+      <<: [*influx-env, *mariadb-env]
     depends_on:
       - mariadb
       - influxdb
 
 
 
-  smart_kip_control_actor:
-    build: ../smart_kip_control_actor
+  smart_kip_control_actuator:
+    build: ../smart_kip_control_actuator
     container_name: control-app
     restart: unless-stopped
     network_mode: host
     privileged: true
     devices:
       - /dev/gpiomem
-    env_file: ../smart_kip_control_actor/.env
     environment:
-      <<: *influx-env
+      <<: [*influx-env, *mariadb-env, *tapo-env]
     depends_on:
       - mariadb
       - influxdb
@@ -43,9 +53,8 @@ services:
     container_name: sensor-app
     restart: unless-stopped
     network_mode: host
-    env_file: ../smart_kip_sensor_data/.env
     environment:
-      <<: *influx-env
+      <<: [*influx-env, *mariadb-env]
     depends_on:
       - mariadb
       - influxdb
@@ -57,9 +66,8 @@ services:
     container_name: analyze-app
     restart: unless-stopped
     network_mode: host
-    env_file: ../smart_kip_analyze_data/.env
     environment:
-      <<: *influx-env
+      <<: [*influx-env, *mariadb-env]
     depends_on:
       - mariadb
       - influxdb
