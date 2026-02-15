@@ -1,0 +1,11 @@
+[Unit]
+Description=Smartkip Shutdown HTTP Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/kip/smart_kip_common/shutdown/shutdown_server.py
+User=kip
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
